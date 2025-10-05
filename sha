@@ -1,0 +1,878 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "啥子脚本享受啥子人生",
+   LoadingTitle = "啥子脚本启动中...",
+   LoadingSubtitle = "迪克兔🐇",
+   Theme = "Default",
+   ToggleUIKeybind = "K",
+   ConfigurationSaving = {
+      Enabled = true,
+      FileName = "啥子 Hub"
+   },
+   KeySystem = true,
+   KeySettings = {
+      Title = "需要卡密",
+      Subtitle = "卡密系统",
+      Note = "添加QQ群获取卡密，QQ群：1055869706",
+      FileName = "卡密",
+      SaveKey = true,
+      Key = {"54188"}
+   }
+})
+
+-- 声明页
+local TabDeclaration = Window:CreateTab("声明", 4483362458)
+TabDeclaration:CreateSection("声明：此脚本为自建脚本（现在版本有很多实用功能）")
+TabDeclaration:CreateSection("如有倒卖全家4万")
+TabDeclaration:CreateSection("作者QQ号：9191137878")
+TabDeclaration:CreateSection("QQ群：1055869706")
+
+-- 通用功能页
+local TabGeneral = Window:CreateTab("通用脚本", 4483362458)
+
+-- 玩家属性
+TabGeneral:CreateSection("玩家属性")
+
+local function setWalkSpeed(value)
+   if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+   end
+end
+
+local function setJumpPower(value)
+   if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+      game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
+   end
+end
+
+local function setGravity(value)
+   game.Workspace.Gravity = value
+end
+
+local SliderWalkSpeed = TabGeneral:CreateSlider({
+   Name = "走路速度",
+   Range = {0, 500},
+   Increment = 1,
+   Suffix = "速度",
+   CurrentValue = 16,
+   Flag = "WalkSpeed",
+   Callback = setWalkSpeed
+})
+
+local SliderJumpPower = TabGeneral:CreateSlider({
+   Name = "跳跃力量",
+   Range = {0, 500},
+   Increment = 1,
+   Suffix = "力量",
+   CurrentValue = 50,
+   Flag = "JumpPower",
+   Callback = setJumpPower
+})
+
+local SliderGravity = TabGeneral:CreateSlider({
+   Name = "重力设置",
+   Range = {0, 500},
+   Increment = 1,
+   Suffix = "重力",
+   CurrentValue = 196,
+   Flag = "Gravity",
+   Callback = setGravity
+})
+local function setHealth(value)
+   if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+      game.Players.LocalPlayer.Character.Humanoid.Health = value
+   end
+end
+
+local SliderHealth = TabGeneral:CreateSlider({
+   Name = "生命值设置",
+   Range = {0, 1000},
+   Increment = 1,
+   Suffix = "生命值",
+   CurrentValue = 100,
+   Flag = "Health",
+   Callback = setHealth
+})
+local AntiFallDamageEnabled = false
+local function toggleAntiFallDamage()
+   AntiFallDamageEnabled = not AntiFallDamageEnabled
+   if AntiFallDamageEnabled then
+      game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
+         character:WaitForChild("Humanoid").StateChanged:Connect(function(oldState, newState)
+            if newState == Enum.HumanoidStateType.FallingDown or newState == Enum.HumanoidStateType.PlatformStanding then
+               character.Humanoid:ChangeState(Enum.HumanoidStateType.Running)
+            end
+         end)
+      end)
+   end
+end
+
+local ToggleAntiFallDamage = TabGeneral:CreateToggle({
+   Name = "防摔落伤害",
+   CurrentValue = false,
+   Flag = "AntiFallDamage",
+   Callback = toggleAntiFallDamage
+})
+
+-- 飞行功能
+TabGeneral:CreateSection("移动功能")
+
+local function loadFlightScript()
+   loadstring(game:HttpGet("https://pastebin.com/raw/V5PQy3y0"))()
+end
+
+local ButtonFlight = TabGeneral:CreateButton({
+   Name = "飞行脚本",
+   Callback = loadFlightScript
+})
+
+-- 无限跳跃
+local InfiniteJumpEnabled = false
+local function toggleInfiniteJump()
+   InfiniteJumpEnabled = not InfiniteJumpEnabled
+   if InfiniteJumpEnabled then
+      game:GetService("UserInputService").JumpRequest:Connect(function()
+         if InfiniteJumpEnabled then
+            game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+         end
+      end)
+   end
+end
+
+local ToggleInfiniteJump = TabGeneral:CreateToggle({
+   Name = "无限跳跃",
+   CurrentValue = false,
+   Flag = "InfiniteJump",
+   Callback = toggleInfiniteJump
+})
+
+-- 透视功能
+TabGeneral:CreateSection("视觉功能")
+
+local function loadESP()
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/cool83birdcarfly02six/UNIVERSALESPLTX/main/README.md"))()
+end
+
+local ButtonESP = TabGeneral:CreateButton({
+   Name = "透视ESP",
+   Callback = loadESP
+})
+
+-- 夜视功能
+local NightVisionEnabled = false
+local function toggleNightVision()
+   NightVisionEnabled = not NightVisionEnabled
+   if NightVisionEnabled then
+      game.Lighting.Ambient = Color3.new(1, 1, 1)
+      game.Lighting.Brightness = 2
+      game.Lighting.GlobalShadows = false
+   else
+      game.Lighting.Ambient = Color3.new(0, 0, 0)
+      game.Lighting.Brightness = 1
+      game.Lighting.GlobalShadows = true
+   end
+end
+
+local ToggleNightVision = TabGeneral:CreateToggle({
+   Name = "夜视模式",
+   CurrentValue = false,
+   Flag = "NightVision",
+   Callback = toggleNightVision
+})
+
+-- 全亮功能
+local FullBrightEnabled = false
+local function toggleFullBright()
+   FullBrightEnabled = not FullBrightEnabled
+   if FullBrightEnabled then
+      game.Lighting.Ambient = Color3.new(1, 1, 1)
+      game.Lighting.Brightness = 1
+      game.Lighting.GlobalShadows = false
+      game.Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+   else
+      game.Lighting.Ambient = Color3.new(0, 0, 0)
+      game.Lighting.Brightness = 1
+      game.Lighting.GlobalShadows = true
+      game.Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
+   end
+end
+
+local ToggleFullBright = TabGeneral:CreateToggle({
+   Name = "全亮模式",
+   CurrentValue = false,
+   Flag = "FullBright",
+   Callback = toggleFullBright
+})
+
+-- 自瞄功能
+TabGeneral:CreateSection("战斗功能")
+
+local function loadAimbot()
+   loadstring(game:HttpGet("https://pastefy.app/ZYMlyhhz/raw"))()
+end
+
+local ButtonAimbot = TabGeneral:CreateButton({
+   Name = "自瞄脚本",
+   Callback = loadAimbot
+})
+local KillLogEnabled = false
+local KillLogConnection
+local function toggleKillLog()
+   KillLogEnabled = not KillLogEnabled
+   if KillLogEnabled then
+      Rayfield:Notify({
+         Title = "击杀日志",
+         Content = "击杀日志已启用",
+         Duration = 3,
+         Image = 4483362458
+      })
+      
+      KillLogConnection = game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
+         character:WaitForChild("Humanoid").Died:Connect(function()
+            Rayfield:Notify({
+               Title = "角色死亡",
+               Content = "你的角色已死亡，正在等待重生...",
+               Duration = 5,
+               Image = 4483362458
+            })
+         end)
+      end)
+   else
+      if KillLogConnection then
+         KillLogConnection:Disconnect()
+      end
+   end
+end
+
+local ToggleKillLog = TabGeneral:CreateToggle({
+   Name = "击杀日志",
+   CurrentValue = false,
+   Flag = "KillLog",
+   Callback = toggleKillLog
+})
+
+-- 穿墙功能
+local NoclipEnabled = false
+local NoclipConnection
+local function toggleNoclip()
+   NoclipEnabled = not NoclipEnabled
+   if NoclipEnabled then
+      NoclipConnection = game:GetService("RunService").Stepped:Connect(function()
+         if game.Players.LocalPlayer.Character then
+            for _, part in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+               if part:IsA("BasePart") then
+                  part.CanCollide = false
+               end
+            end
+         end
+      end)
+   else
+      if NoclipConnection then
+         NoclipConnection:Disconnect()
+      end
+   end
+end
+
+local ToggleNoclip = TabGeneral:CreateToggle({
+   Name = "穿墙模式",
+   CurrentValue = false,
+   Flag = "Noclip",
+   Callback = toggleNoclip
+})
+
+-- 点击传送功能
+local ClickTPEnabled = false
+local ClickTPConnection
+local function toggleClickTP()
+   ClickTPEnabled = not ClickTPEnabled
+   if ClickTPEnabled then
+      Rayfield:Notify({
+         Title = "点击传送",
+         Content = "点击传送已启用，按住Ctrl+点击鼠标左键传送",
+         Duration = 3,
+         Image = 4483362458
+      })
+      
+      ClickTPConnection = game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+         if gameProcessed then return end
+         if input.UserInputType == Enum.UserInputType.MouseButton1 and game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftControl) then
+            local character = game.Players.LocalPlayer.Character
+            if character and character:FindFirstChild("HumanoidRootPart") then
+               local mouse = game.Players.LocalPlayer:GetMouse()
+               character.HumanoidRootPart.CFrame = CFrame.new(mouse.Hit.Position + Vector3.new(0, 3, 0))
+            end
+         end
+      end)
+   else
+      if ClickTPConnection then
+         ClickTPConnection:Disconnect()
+      end
+   end
+end
+
+local ToggleClickTP = TabGeneral:CreateToggle({
+   Name = "点击传送",
+   CurrentValue = false,
+   Flag = "ClickTP",
+   Callback = toggleClickTP
+})
+-- 游戏脚本页
+local TabGameScripts = Window:CreateTab("游戏脚本", 4483362458)
+
+-- 99Nights脚本
+TabGameScripts:CreateSection("99Nights脚本")
+
+TabGameScripts:CreateParagraph({
+   Title = "99Nights脚本",
+   Content = "这是一个功能强大的游戏脚本，包含多种实用功能。点击下方按钮加载脚本。"
+})
+
+local Button99Nights = TabGameScripts:CreateButton({
+   Name = "加载99Nights脚本",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/hdjsjjdgrhj/script-hub/refs/heads/main/99Nights"))()
+      Rayfield:Notify({
+         Title = "99Nights加载成功",
+         Content = "99Nights脚本已加载完成！请查看游戏界面上的新菜单。",
+         Duration = 6,
+         Image = 4483362458
+      })
+   end
+})
+
+-- 其他游戏脚本
+TabGameScripts:CreateSection("其他热门脚本")
+
+local ButtonSAO = TabGameScripts:CreateButton({
+   Name = "SAO刀剑神域脚本",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/Hfh916/54188/0d64db31be9577a959c7f38dfbc2532a4b2d048e/sao"))()
+      Rayfield:Notify({
+         Title = "SAO脚本加载成功",
+         Content = "刀剑神域脚本已加载完成！",
+         Duration = 5,
+         Image = 4483362458
+      })
+   end
+})
+
+local ButtonNaturalDisaster = TabGameScripts:CreateButton({
+   Name = "自然灾害脚本",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/xiao122231/xiao122231/main/%E8%87%AA%E7%84%B6%E7%81%BE%E5%AE%B3"))()
+      Rayfield:Notify({
+         Title = "自然灾害加载成功",
+         Content = "自然灾害脚本已加载！请小心使用。",
+         Duration = 5,
+         Image = 4483362458
+      })
+   end
+})
+
+local ButtonInfiniteYield = TabGameScripts:CreateButton({
+   Name = "无限收益脚本",
+   Callback = function()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+      Rayfield:Notify({
+         Title = "无限收益加载成功",
+         Content = "无限收益脚本已加载！按F9查看使用方法。",
+         Duration = 5,
+         Image = 4483362458
+      })
+   end
+})
+
+local ButtonOwlHub = TabGameScripts:CreateButton({
+   Name = "Owl Hub脚本",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"))()
+      Rayfield:Notify({
+         Title = "Owl Hub加载成功",
+         Content = "Owl Hub脚本已加载完成！",
+         Duration = 5,
+         Image = 4483362458
+      })
+   end
+})
+
+local ButtonCmdX = TabGameScripts:CreateButton({
+   Name = "CMD-X脚本",
+   Callback = function()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source'))()
+      Rayfield:Notify({
+         Title = "CMD-X加载成功",
+         Content = "CMD-X脚本已加载！按右CTRL打开菜单。",
+         Duration = 5,
+         Image = 4483362458
+      })
+   end
+})
+
+-- 脚本说明
+TabGameScripts:CreateSection("使用说明")
+
+TabGameScripts:CreateParagraph({
+   Title = "脚本使用提示",
+   Content = "加载脚本后，通常会有新的菜单出现在屏幕上。如果没看到，请按F9或右CTRL键尝试打开菜单。不同脚本的打开方式可能不同。"
+})
+
+local ButtonScriptHelp = TabGameScripts:CreateButton({
+   Name = "脚本帮助",
+   Callback = function()
+      Rayfield:Notify({
+         Title = "脚本使用帮助",
+         Content = "1. 加载后按F9查看控制台\n2. 按右CTRL尝试打开菜单\n3. 如遇问题请重新加载游戏",
+         Duration = 8,
+         Image = 4483362458
+      })
+   end
+})
+
+-- 工具功能页
+local TabTools = Window:CreateTab("工具功能", 4483362458)
+
+-- 服务器工具
+TabTools:CreateSection("服务器工具")
+
+local ButtonServerHop = TabTools:CreateButton({
+   Name = "切换服务器",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/LeoKholYt/roblox/main/lk_serverhop.lua"))()
+   end
+})
+
+local ButtonRejoin = TabTools:CreateButton({
+   Name = "重新加入",
+   Callback = function()
+      game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
+   end
+})
+
+-- 玩家工具
+TabTools:CreateSection("玩家工具")
+
+local ButtonResetCharacter = TabTools:CreateButton({
+   Name = "重置角色",
+   Callback = function()
+      game.Players.LocalPlayer.Character:BreakJoints()
+   end
+})
+
+local function teleportToPlayer(playerName)
+   local targetPlayer = nil
+   for _, player in pairs(game.Players:GetPlayers()) do
+      if string.lower(player.Name) == string.lower(playerName) or string.lower(player.DisplayName) == string.lower(playerName) then
+         targetPlayer = player
+         break
+      end
+   end
+   
+   if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+   end
+end
+
+local InputTeleport = TabTools:CreateInput({
+   Name = "传送到玩家",
+   PlaceholderText = "输入玩家名称",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+      teleportToPlayer(Text)
+   end
+})
+local function teleportToPosition(x, y, z)
+   local character = game.Players.LocalPlayer.Character
+   if character and character:FindFirstChild("HumanoidRootPart") then
+      character.HumanoidRootPart.CFrame = CFrame.new(x, y, z)
+   end
+end
+
+local InputTeleportPos = TabTools:CreateInput({
+   Name = "传送到坐标",
+   PlaceholderText = "格式: x,y,z",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+      local coords = {}
+      for coord in string.gmatch(Text, "[^,]+") do
+         table.insert(coords, tonumber(coord))
+      end
+      if #coords == 3 then
+         teleportToPosition(coords[1], coords[2], coords[3])
+      end
+   end
+})
+
+-- 游戏工具
+TabTools:CreateSection("游戏工具")
+
+local ButtonAntiAFK = TabTools:CreateButton({
+   Name = "防AFK",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/FilteringEnabled/FE-AntiAFK/main/script.lua"))()
+   end
+})
+
+local function setFPScap(value)
+   setfpscap(value)
+end
+
+local SliderFPS = TabTools:CreateSlider({
+   Name = "FPS限制",
+   Range = {1, 999},
+   Increment = 1,
+   Suffix = "FPS",
+   CurrentValue = 60,
+   Flag = "FPScap",
+   Callback = setFPScap
+})
+
+-- 截图功能
+local ButtonScreenshot = TabTools:CreateButton({
+   Name = "游戏截图",
+   Callback = function()
+      local screenshot = game:GetService("ScreenshotService"):TakeScreenshot()
+      Rayfield:Notify({
+         Title = "截图完成",
+         Content = "游戏截图已保存",
+         Duration = 3,
+         Image = 4483362458
+      })
+   end
+})
+
+-- 娱乐功能页
+local TabFun = Window:CreateTab("娱乐功能", 4483362458)
+
+-- 特效功能
+TabFun:CreateSection("特效功能")
+
+local ButtonChatSpam = TabFun:CreateButton({
+   Name = "聊天刷屏",
+   Callback = function()
+      for i = 1, 10 do
+         game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("啥子脚本牛逼！QQ群：1055869706", "All")
+         wait(0.5)
+      end
+   end
+})
+
+local function changeSkybox(skyboxId)
+   if game.Lighting:FindFirstChild("Sky") then
+      game.Lighting.Sky:Destroy()
+   end
+   
+   local sky = Instance.new("Sky")
+   sky.SkyboxBk = "http://www.roblox.com/asset/?id=" .. skyboxId
+   sky.SkyboxDn = "http://www.roblox.com/asset/?id=" .. skyboxId
+   sky.SkyboxFt = "http://www.roblox.com/asset/?id=" .. skyboxId
+   sky.SkyboxLf = "http://www.roblox.com/asset/?id=" .. skyboxId
+   sky.SkyboxRt = "http://www.roblox.com/asset/?id=" .. skyboxId
+   sky.SkyboxUp = "http://www.roblox.com/asset/?id=" .. skyboxId
+   sky.Parent = game.Lighting
+end
+
+local DropdownSkybox = TabFun:CreateDropdown({
+   Name = "天空盒",
+   Options = {"默认", "夜晚 (271763520)", "太空 (1034052435)", "霓虹 (120641970)", "日落 (323493378)", "极光 (509457579)"},
+   CurrentOption = "默认",
+   Flag = "Skybox",
+   Callback = function(Option)
+      if Option == "默认" then
+         if game.Lighting:FindFirstChild("Sky") then
+            game.Lighting.Sky:Destroy()
+         end
+      else
+         local id = string.match(Option, "%((%d+)%)")
+         if id then
+            changeSkybox(id)
+         end
+      end
+   end
+})
+
+-- 角色特效
+TabFun:CreateSection("角色特效")
+
+local function resizeCharacter(scale)
+   local character = game.Players.LocalPlayer.Character
+   if character then
+      for _, part in pairs(character:GetDescendants()) do
+         if part:IsA("BasePart") then
+            part.Size = part.Size * scale
+         end
+      end
+   end
+end
+
+local ButtonBigHead = TabFun:CreateButton({
+   Name = "大头模式",
+   Callback = function()
+      resizeCharacter(2)
+   end
+})
+
+local ButtonSmallHead = TabFun:CreateButton({
+   Name = "小头模式",
+   Callback = function()
+      resizeCharacter(0.5)
+   end
+})
+
+-- 隐身模式
+local InvisibleEnabled = false
+local OriginalTransparency = {}
+local function toggleInvisible()
+   InvisibleEnabled = not InvisibleEnabled
+   local character = game.Players.LocalPlayer.Character
+   
+   if character then
+      if InvisibleEnabled then
+         -- 保存原始透明度并设置为完全透明
+         for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+               OriginalTransparency[part] = part.Transparency
+               part.Transparency = 1
+            end
+         end
+      else
+         -- 恢复原始透明度
+         for part, transparency in pairs(OriginalTransparency) do
+            if part and part.Parent then
+               part.Transparency = transparency
+            end
+         end
+         OriginalTransparency = {}
+      end
+   end
+end
+
+local ToggleInvisible = TabFun:CreateToggle({
+   Name = "隐身模式",
+   CurrentValue = false,
+   Flag = "Invisible",
+   Callback = toggleInvisible
+})
+local ButtonExplosion = TabFun:CreateButton({
+   Name = "自杀啥子应该就这样做",
+   Callback = function()
+      local character = game.Players.LocalPlayer.Character
+      if character and character:FindFirstChild("HumanoidRootPart") then
+         local explosion = Instance.new("Explosion")
+         explosion.Position = character.HumanoidRootPart.Position
+         explosion.BlastPressure = 500000
+         explosion.BlastRadius = 20
+         explosion.Parent = workspace
+         Rayfield:Notify({
+            Title = "已完成使命",
+            Content = "啥子已完成使命",
+            Duration = 3,
+            Image = 4483362458
+         })
+      end
+   end
+})
+-- 火焰特效
+local ButtonFireEffect = TabFun:CreateButton({
+   Name = "火焰特效",
+   Callback = function()
+      local character = game.Players.LocalPlayer.Character
+      if character and character:FindFirstChild("HumanoidRootPart") then
+         local fire = Instance.new("Fire")
+         fire.Size = 10
+         fire.Parent = character.HumanoidRootPart
+         Rayfield:Notify({
+            Title = "火焰特效",
+            Content = "已添加火焰特效",
+            Duration = 3,
+            Image = 4483362458
+         })
+      end
+   end
+})
+
+-- 烟雾特效
+local ButtonSmokeEffect = TabFun:CreateButton({
+   Name = "烟雾特效",
+   Callback = function()
+      local character = game.Players.LocalPlayer.Character
+      if character and character:FindFirstChild("HumanoidRootPart") then
+         local smoke = Instance.new("Smoke")
+         smoke.Size = 5
+         smoke.Opacity = 0.5
+         smoke.Parent = character.HumanoidRootPart
+         Rayfield:Notify({
+            Title = "烟雾特效",
+            Content = "已添加烟雾特效",
+            Duration = 3,
+            Image = 4483362458
+         })
+      end
+   end
+})
+local DanceEnabled = false
+local OriginalAnimate
+local function toggleDance()
+   DanceEnabled = not DanceEnabled
+   local character = game.Players.LocalPlayer.Character
+   
+   if character and character:FindFirstChild("Humanoid") then
+      if DanceEnabled then
+         -- 保存原始动画
+         if character:FindFirstChild("Animate") then
+            OriginalAnimate = character.Animate:Clone()
+            character.Animate:Destroy()
+         end
+         
+         -- 加载跳舞动画
+         local animate = Instance.new("Animation")
+         animate.AnimationId = "rbxassetid://3189773368" -- 跳舞动画ID
+         
+         local track = character.Humanoid:LoadAnimation(animate)
+         track:Play()
+         track.Looped = true
+         
+      else
+         -- 恢复原始动画
+         if OriginalAnimate then
+            OriginalAnimate.Parent = character
+         end
+      end
+   end
+end
+
+local ToggleDance = TabFun:CreateToggle({
+   Name = "跳舞模式",
+   CurrentValue = false,
+   Flag = "Dance",
+   Callback = toggleDance
+})
+
+-- 自动收集页
+local TabAuto = Window:CreateTab("自动功能", 4483362458)
+
+-- 自动点击
+TabAuto:CreateSection("自动点击")
+
+local AutoClickEnabled = false
+local function toggleAutoClick()
+   AutoClickEnabled = not AutoClickEnabled
+   while AutoClickEnabled do
+      mouse1click()
+      wait(0.1)
+   end
+end
+
+local ToggleAutoClick = TabAuto:CreateToggle({
+   Name = "自动点击",
+   CurrentValue = false,
+   Flag = "AutoClick",
+   Callback = toggleAutoClick
+})
+
+-- 自动农场
+TabAuto:CreateSection("自动农场")
+
+local ButtonSimpleFarm = TabAuto:CreateButton({
+   Name = "简单自动农场",
+   Callback = function()
+      Rayfield:Notify({
+         Title = "自动农场",
+         Content = "此功能需要根据具体游戏定制",
+         Duration = 3,
+         Image = 4483362458
+      })
+   end
+})
+
+-- 自动完成任务
+local AutoCompleteEnabled = false
+local function toggleAutoComplete()
+   AutoCompleteEnabled = not AutoCompleteEnabled
+   Rayfield:Notify({
+      Title = "自动完成任务",
+      Content = AutoCompleteEnabled and "自动完成任务已启用" or "自动完成任务已禁用",
+      Duration = 3,
+      Image = 4483362458
+   })
+end
+
+local ToggleAutoComplete = TabAuto:CreateToggle({
+   Name = "自动完成任务",
+   CurrentValue = false,
+   Flag = "AutoComplete",
+   Callback = toggleAutoComplete
+})
+
+-- 设置页
+local TabSettings = Window:CreateTab("设置", 4483362458)
+
+-- 界面设置
+TabSettings:CreateSection("界面设置")
+
+local ButtonHideUI = TabSettings:CreateButton({
+   Name = "隐藏/显示界面",
+   Callback = function()
+      Rayfield:ToggleUI()
+   end
+})
+
+local ButtonDestroyUI = TabSettings:CreateButton({
+   Name = "关闭脚本",
+   Callback = function()
+      Rayfield:Destroy()
+   end
+})
+
+-- 配置管理
+TabSettings:CreateSection("配置管理")
+
+local ButtonSaveConfig = TabSettings:CreateButton({
+   Name = "保存配置",
+   Callback = function()
+      Rayfield:SaveConfiguration()
+      Rayfield:Notify({
+         Title = "配置已保存",
+         Content = "您的设置已成功保存",
+         Duration = 3,
+         Image = 4483362458
+      })
+   end
+})
+
+local ButtonLoadConfig = TabSettings:CreateButton({
+   Name = "加载配置",
+   Callback = function()
+      Rayfield:LoadConfiguration()
+      Rayfield:Notify({
+         Title = "配置已加载",
+         Content = "您的设置已成功加载",
+         Duration = 3,
+         Image = 4483362458
+      })
+   end
+})
+
+-- 初始化提示
+Rayfield:Notify({
+   Title = "啥子脚本加载成功",
+   Content = "享受你的啥子人生！QQ群：1055869706\n新增功能：重力设置、全亮模式、点击传送、隐身模式、游戏脚本页面等",
+   Duration = 5,
+   Image = 4483362458
+})
+
+-- 自动应用保存的设置
+spawn(function()
+   wait(2)
+   if Rayfield.Flags then
+      if Rayfield.Flags.WalkSpeed then
+         setWalkSpeed(Rayfield.Flags.WalkSpeed)
+      end
+      if Rayfield.Flags.JumpPower then
+         setJumpPower(Rayfield.Flags.JumpPower)
+      end
+      if Rayfield.Flags.Gravity then
+         setGravity(Rayfield.Flags.Gravity)
+      end
+   end
+end)
