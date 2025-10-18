@@ -144,15 +144,15 @@ local function updatePlayerCount()
     
     
     if playerCount < 5 then
-        playerCountText.TextColor3 = Color3.fromRGB(255, 100, 100)  -- 红色
+        playerCountText.TextColor3 = Color3.fromRGB(255, 100, 100)  
         statusIndicator.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
         statusGlow.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
     elseif playerCount < 15 then
-        playerCountText.TextColor3 = Color3.fromRGB(255, 200, 100)  -- 黄色
+        playerCountText.TextColor3 = Color3.fromRGB(255, 200, 100)  
         statusIndicator.BackgroundColor3 = Color3.fromRGB(255, 200, 100)
         statusGlow.BackgroundColor3 = Color3.fromRGB(255, 200, 100)
     else
-        playerCountText.TextColor3 = Color3.fromRGB(100, 200, 100)  -- 绿色
+        playerCountText.TextColor3 = Color3.fromRGB(100, 200, 100)  
         statusIndicator.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
         statusGlow.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
     end
